@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tính giờ về</title>
+</head>
+<body>
+    <h2>Tính giờ tan làm</h2>
+
+    <input type="time" id="checkin">
+    <button onclick="calculate()">Tính</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function calculate() {
+            const input = document.getElementById('checkin').value;
+
+            if (!input) return;
+
+            const [h, m] = input.split(':').map(Number);
+
+            const checkIn = new Date();
+            checkIn.setHours(h, m, 0, 0);
+
+            const leave = new Date(checkIn);
+
+            // 8h làm việc
+            leave.setMinutes(leave.getMinutes() + 480);
+
+            // nghỉ trưa 1h15
+            leave.setMinutes(leave.getMinutes() + 75);
+
+            document.getElementById('result').innerText =
+                `Giờ về: ${leave.toLocaleTimeString('vi-VN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}`;
+        }
+    </script>
+</body>
+</html>
