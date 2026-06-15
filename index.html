@@ -1,41 +1,257 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Tính giờ về</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính giờ tan làm</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+
+            background: linear-gradient(
+                135deg,
+                #667eea 0%,
+                #764ba2 40%,
+                #6dd5ed 100%
+            );
+
+            position: relative;
+        }
+
+        /* Background blobs */
+        body::before,
+        body::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.25);
+            top: -100px;
+            left: -80px;
+        }
+
+        body::after {
+            width: 250px;
+            height: 250px;
+            background: rgba(0, 255, 255, 0.2);
+            bottom: -80px;
+            right: -50px;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+
+            width: 380px;
+            padding: 32px;
+
+            background: rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.15),
+                inset 0 1px 1px rgba(255,255,255,0.3);
+
+            overflow: hidden;
+            text-align: center;
+            color: white;
+        }
+
+        /* Liquid glass overlay */
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0.35),
+                rgba(255,255,255,0.05)
+            );
+
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .icon {
+            font-size: 52px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        input[type="time"] {
+            width: 100%;
+            padding: 14px;
+
+            background: rgba(255,255,255,0.15);
+            color: white;
+
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 14px;
+
+            outline: none;
+            font-size: 16px;
+
+            margin-bottom: 16px;
+        }
+
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 14px;
+
+            background: rgba(255,255,255,0.2);
+            color: white;
+
+            font-size: 16px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            backdrop-filter: blur(10px);
+
+            transition: all 0.25s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #result {
+            margin-top: 24px;
+            padding: 18px;
+
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+
+            display: none;
+
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+
+            animation: fadeIn 0.3s ease;
+        }
+
+        .label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 6px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 450px) {
+            .card {
+                width: 92%;
+                padding: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Tính giờ tan làm</h2>
 
-    <input type="time" id="checkin">
-    <button onclick="calculate()">Tính</button>
+    <div class="card">
+        <div class="icon">🕒</div>
 
-    <h3 id="result"></h3>
+        <h2>Tính giờ tan làm</h2>
+
+        <input type="time" id="checkin">
+
+        <button onclick="calculate()">
+            Tính giờ về
+        </button>
+
+        <div id="result"></div>
+    </div>
 
     <script>
         function calculate() {
-            const input = document.getElementById('checkin').value;
+            const input = document.getElementById("checkin").value;
 
-            if (!input) return;
+            if (!input) {
+                alert("Vui lòng chọn giờ check-in");
+                return;
+            }
 
-            const [h, m] = input.split(':').map(Number);
+            const [h, m] = input.split(":").map(Number);
 
             const checkIn = new Date();
             checkIn.setHours(h, m, 0, 0);
 
             const leave = new Date(checkIn);
 
-            // 8h làm việc
+            // 8 tiếng làm việc
             leave.setMinutes(leave.getMinutes() + 480);
 
-            // nghỉ trưa 1h15
+            // Nghỉ trưa 1 tiếng 15 phút
             leave.setMinutes(leave.getMinutes() + 75);
 
-            document.getElementById('result').innerText =
-                `Giờ về: ${leave.toLocaleTimeString('vi-VN', {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}`;
+            const time = leave.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+            const result = document.getElementById("result");
+
+            result.innerHTML = `
+                <div class="label">Giờ tan làm</div>
+                🏠 ${time}
+            `;
+
+            result.style.display = "block";
         }
     </script>
+
 </body>
 </html>
