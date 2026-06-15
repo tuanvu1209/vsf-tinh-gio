@@ -1,257 +1,335 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tính giờ tan làm</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tính giờ tan làm</title>
+     <link
+        rel="icon"
+        href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⏰</text></svg>'
+    >
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                         Roboto, Helvetica, Arial, sans-serif;
-        }
+<style>
+:root {
+    --glass-bg: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.22);
+    --text: rgba(255,255,255,0.95);
+}
 
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
+}
 
-            background: linear-gradient(
-                135deg,
-                #667eea 0%,
-                #764ba2 40%,
-                #6dd5ed 100%
-            );
+body {
+    min-height: 100vh;
+    padding:
+        max(20px, env(safe-area-inset-top))
+        16px
+        max(20px, env(safe-area-inset-bottom));
 
-            position: relative;
-        }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        /* Background blobs */
-        body::before,
-        body::after {
-            content: "";
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-        }
+    background:
+        radial-gradient(circle at top left,
+            rgba(255,255,255,.25),
+            transparent 35%),
+        radial-gradient(circle at bottom right,
+            rgba(0,255,255,.18),
+            transparent 35%),
+        linear-gradient(
+            135deg,
+            #4f46e5 0%,
+            #7c3aed 40%,
+            #0ea5e9 100%
+        );
 
-        body::before {
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.25);
-            top: -100px;
-            left: -80px;
-        }
+    overflow: hidden;
+}
 
-        body::after {
-            width: 250px;
-            height: 250px;
-            background: rgba(0, 255, 255, 0.2);
-            bottom: -80px;
-            right: -50px;
-        }
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+}
 
-        .card {
-            position: relative;
-            z-index: 1;
+body::before {
+    width: 250px;
+    height: 250px;
+    background: rgba(255,255,255,.18);
+    top: -80px;
+    left: -80px;
+}
 
-            width: 380px;
-            padding: 32px;
+body::after {
+    width: 220px;
+    height: 220px;
+    background: rgba(0,255,255,.15);
+    bottom: -60px;
+    right: -60px;
+}
 
-            background: rgba(255, 255, 255, 0.15);
+.card {
+    position: relative;
+    width: min(100%, 420px);
+    padding: 28px;
 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+    background: var(--glass-bg);
 
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 30px;
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
 
-            box-shadow:
-                0 8px 32px rgba(0,0,0,0.15),
-                inset 0 1px 1px rgba(255,255,255,0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
 
-            overflow: hidden;
-            text-align: center;
-            color: white;
-        }
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.15),
+        inset 0 1px 1px rgba(255,255,255,.35);
 
-        /* Liquid glass overlay */
-        .card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
+    color: var(--text);
+    overflow: hidden;
+}
 
-            background: linear-gradient(
-                135deg,
-                rgba(255,255,255,0.35),
-                rgba(255,255,255,0.05)
-            );
+.card::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -20%;
 
-            border-radius: inherit;
-            pointer-events: none;
-        }
+    width: 140%;
+    height: 80%;
 
-        .icon {
-            font-size: 52px;
-            margin-bottom: 12px;
-        }
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.25),
+        transparent
+    );
 
-        h2 {
-            margin-bottom: 24px;
-            font-weight: 700;
-        }
+    transform: rotate(-10deg);
+}
 
-        input[type="time"] {
-            width: 100%;
-            padding: 14px;
+.icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+    text-align: center;
+}
 
-            background: rgba(255,255,255,0.15);
-            color: white;
+h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
 
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 14px;
+.input-group {
+    margin-bottom: 16px;
+}
 
-            outline: none;
-            font-size: 16px;
+.label {
+    font-size: 14px;
+    opacity: .85;
+    margin-bottom: 8px;
+}
 
-            margin-bottom: 16px;
-        }
+input[type="time"] {
+    width: 100%;
+    height: 58px;
 
-        input[type="time"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            cursor: pointer;
-        }
+    padding: 0 16px;
 
-        button {
-            width: 100%;
-            padding: 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.2);
 
-            border: none;
-            border-radius: 14px;
+    background: rgba(255,255,255,.12);
+    color: white;
 
-            background: rgba(255,255,255,0.2);
-            color: white;
+    font-size: 18px;
+    outline: none;
 
-            font-size: 16px;
-            font-weight: 600;
+    backdrop-filter: blur(20px);
 
-            cursor: pointer;
+    transition: .25s;
+}
 
-            backdrop-filter: blur(10px);
+input[type="time"]:focus {
+    border-color: rgba(255,255,255,.45);
+    background: rgba(255,255,255,.18);
+}
 
-            transition: all 0.25s ease;
-        }
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
 
-        button:hover {
-            transform: translateY(-2px);
-            background: rgba(255,255,255,0.3);
-        }
+#result {
+    display: none;
 
-        button:active {
-            transform: scale(0.98);
-        }
+    margin-top: 20px;
+    padding: 24px;
 
-        #result {
-            margin-top: 24px;
-            padding: 18px;
+    border-radius: 24px;
 
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 16px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.18);
 
-            display: none;
+    backdrop-filter: blur(20px);
 
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+    animation: fade .3s ease;
+    text-align: center;
+}
 
-            animation: fadeIn 0.3s ease;
-        }
+.result-label {
+    font-size: 13px;
+    opacity: .8;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
 
-        .label {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 6px;
-        }
+.time {
+    font-size: clamp(32px, 8vw, 42px);
+    font-weight: 800;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.note {
+    margin-top: 14px;
+    font-size: 13px;
+    opacity: .85;
+    line-height: 1.5;
+}
 
-        @media (max-width: 450px) {
-            .card {
-                width: 92%;
-                padding: 24px;
-            }
-        }
-    </style>
+@keyframes fade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footer {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 12px;
+    opacity: .7;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 24px 20px;
+        border-radius: 28px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .icon {
+        font-size: 48px;
+    }
+
+    input[type="time"] {
+        height: 54px;
+        font-size: 16px;
+    }
+
+    .time {
+        font-size: 36px;
+    }
+}
+</style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="icon">🕒</div>
+<div class="card">
+    <div class="icon">🕒</div>
 
-        <h2>Tính giờ tan làm</h2>
+    <h2>Tính giờ tan làm</h2>
 
+    <div class="input-group">
+        <div class="label">Giờ check-in</div>
         <input type="time" id="checkin">
-
-        <button onclick="calculate()">
-            Tính giờ về
-        </button>
-
-        <div id="result"></div>
     </div>
 
-    <script>
-        function calculate() {
-            const input = document.getElementById("checkin").value;
+    <div id="result"></div>
 
-            if (!input) {
-                alert("Vui lòng chọn giờ check-in");
-                return;
-            }
+    <div class="footer">
+        8 giờ làm việc • Nghỉ trưa 1 giờ 15 phút
+    </div>
+</div>
 
-            const [h, m] = input.split(":").map(Number);
+<script>
+const input = document.getElementById("checkin");
+const result = document.getElementById("result");
 
-            const checkIn = new Date();
-            checkIn.setHours(h, m, 0, 0);
+// Khôi phục giờ đã lưu
+const saved = localStorage.getItem("checkin");
+if (saved) {
+    input.value = saved;
+    calculate();
+}
 
-            const leave = new Date(checkIn);
+input.addEventListener("change", calculate);
 
-            // 8 tiếng làm việc
-            leave.setMinutes(leave.getMinutes() + 480);
+function calculate() {
+    const value = input.value;
 
-            // Nghỉ trưa 1 tiếng 15 phút
-            leave.setMinutes(leave.getMinutes() + 75);
+    if (!value) {
+        result.style.display = "none";
+        return;
+    }
 
-            const time = leave.toLocaleTimeString("vi-VN", {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+    localStorage.setItem("checkin", value);
 
-            const result = document.getElementById("result");
+    const [h, m] = value.split(":").map(Number);
 
-            result.innerHTML = `
-                <div class="label">Giờ tan làm</div>
-                🏠 ${time}
-            `;
+    const leave = new Date();
+    leave.setHours(h, m, 0, 0);
 
-            result.style.display = "block";
-        }
-    </script>
+    // 8 giờ làm việc
+    leave.setMinutes(leave.getMinutes() + 480);
+
+    // Nghỉ trưa 1 giờ 15 phút
+    leave.setMinutes(leave.getMinutes() + 75);
+
+    // Cộng thêm 1 phút để đảm bảo đủ công
+    leave.setMinutes(leave.getMinutes() + 1);
+
+    const time = leave.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    result.innerHTML = `
+        <div class="result-label">
+            GIỜ TAN LÀM
+        </div>
+
+        <div class="time">
+            🏠 ${time}
+        </div>
+
+        <div class="note">
+            ⏰ Đã cộng thêm <b>1 phút</b> vào giờ tan làm để đảm bảo đủ công.
+        </div>
+    `;
+
+    result.style.display = "block";
+}
+</script>
 
 </body>
 </html>
