@@ -273,63 +273,61 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 </div>
 
 <script>
-const input = document.getElementById("checkin");
-const result = document.getElementById("result");
+    const input = document.getElementById("checkin");
+    const result = document.getElementById("result");
 
-// Khôi phục giờ đã lưu
-const saved = localStorage.getItem("checkin");
-if (saved) {
-    input.value = saved;
+    // Mặc định giờ vào là 08:30
+    input.value = "08:30";
+
+    // Tính ngay khi mở app
     calculate();
-}
 
-input.addEventListener("change", calculate);
+    // Tự động tính khi thay đổi giờ
+    input.addEventListener("input", calculate);
 
-function calculate() {
-    const value = input.value;
+    function calculate() {
+        const value = input.value;
 
-    if (!value) {
-        result.style.display = "none";
-        return;
+        if (!value) {
+            result.style.display = "none";
+            return;
+        }
+
+        const [h, m] = value.split(":").map(Number);
+
+        const leave = new Date();
+        leave.setHours(h, m, 0, 0);
+
+        // 8 giờ làm việc
+        leave.setMinutes(leave.getMinutes() + 480);
+
+        // Nghỉ trưa 1 giờ 15 phút
+        leave.setMinutes(leave.getMinutes() + 75);
+
+        // Cộng thêm 1 phút để đảm bảo đủ công
+        leave.setMinutes(leave.getMinutes() + 1);
+
+        const time = leave.toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+        result.innerHTML = `
+            <div class="result-label">
+                GIỜ TAN LÀM
+            </div>
+
+            <div class="time">
+                🏠 ${time}
+            </div>
+
+            <div class="note">
+                ⏰ Đã cộng thêm <b>1 phút</b> để đảm bảo đủ công.
+            </div>
+        `;
+
+        result.style.display = "block";
     }
-
-    localStorage.setItem("checkin", value);
-
-    const [h, m] = value.split(":").map(Number);
-
-    const leave = new Date();
-    leave.setHours(h, m, 0, 0);
-
-    // 8 giờ làm việc
-    leave.setMinutes(leave.getMinutes() + 480);
-
-    // Nghỉ trưa 1 giờ 15 phút
-    leave.setMinutes(leave.getMinutes() + 75);
-
-    // Cộng thêm 1 phút để đảm bảo đủ công
-    leave.setMinutes(leave.getMinutes() + 1);
-
-    const time = leave.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-
-    result.innerHTML = `
-        <div class="result-label">
-            GIỜ TAN LÀM
-        </div>
-
-        <div class="time">
-            🏠 ${time}
-        </div>
-
-        <div class="note">
-            ⏰ Đã cộng thêm <b>1 phút</b> vào giờ tan làm để đảm bảo đủ công.
-        </div>
-    `;
-
-    result.style.display = "block";
-}
 </script>
 
 </body>
