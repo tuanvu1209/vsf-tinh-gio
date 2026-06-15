@@ -2,24 +2,52 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta name="theme-color" content="#4f46e5">
 
-<!-- Hỗ trợ iOS PWA -->
-<meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Quan trọng cho iPhone tai thỏ -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<!-- Màu status bar trên iPhone khi thêm ra màn hình chính -->
-<meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="black-translucent">
-<title>Tính giờ tan làm</title>
-     <link rel="icon"
-      href="https://img.icons8.com/fluency/96/alarm-clock.png">
+    <!-- Màu thanh trình duyệt -->
+    <meta name="theme-color" content="#4f46e5">
 
-<link rel="apple-touch-icon"
-      href="https://img.icons8.com/fluency/180/alarm-clock.png">
+    <!-- Hỗ trợ PWA trên iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Status bar khi Add to Home Screen -->
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent">
+
+    <title>⏰ Tính giờ tan làm</title>
+
+    <!-- Favicon -->
+    <link rel="icon"
+          href="https://img.icons8.com/fluency/96/alarm-clock.png">
+
+    <!-- Icon khi Add to Home Screen -->
+    <link rel="apple-touch-icon"
+          href="https://img.icons8.com/fluency/180/alarm-clock.png">
 
 <style>
+     html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+html {
+    background: linear-gradient(
+        135deg,
+        #4f46e5 0%,
+        #7c3aed 40%,
+        #0ea5e9 100%
+    );
+}
+
+body {
+    background: transparent;
+}
 :root {
     --glass-bg: rgba(255,255,255,0.12);
     --glass-border: rgba(255,255,255,0.22);
