@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
     <meta name="mobile-web-app-capable" content="yes">
 
     <!-- Quan trọng cho iPhone tai thỏ -->
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <!-- Màu thanh trình duyệt -->
     <meta name="theme-color" content="#4f46e5">
@@ -17,352 +16,341 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <!-- Status bar khi Add to Home Screen -->
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <title>⏰ Tính giờ tan làm</title>
 
     <!-- Favicon -->
-    <link rel="icon"
-          href="https://img.icons8.com/fluency/96/alarm-clock.png">
+    <link rel="icon" href="https://img.icons8.com/fluency/96/alarm-clock.png">
 
     <!-- Icon khi Add to Home Screen -->
-    <link rel="apple-touch-icon"
-          href="https://img.icons8.com/fluency/180/alarm-clock.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/180/alarm-clock.png">
 
-<style>
-     html,
-body {
-    width: 100%;
-    min-height: 100%;
-}
+    <style>
+        :root {
+            --app-bg:
+                radial-gradient(circle at top left,
+                    rgba(255, 255, 255, .25),
+                    transparent 35%),
+                radial-gradient(circle at bottom right,
+                    rgba(0, 255, 255, .18),
+                    transparent 35%),
+                linear-gradient(135deg,
+                    #4f46e5 0%,
+                    #7c3aed 40%,
+                    #0ea5e9 100%);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.22);
+            --text: rgba(255, 255, 255, 0.95);
+        }
 
-html {
-    background:
-        radial-gradient(circle at top left,
-            rgba(255,255,255,.25),
-            transparent 35%),
-        radial-gradient(circle at bottom right,
-            rgba(0,255,255,.18),
-            transparent 35%),
-        linear-gradient(
-            135deg,
-            #4f46e5 0%,
-            #7c3aed 40%,
-            #0ea5e9 100%
-        );
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "Segoe UI",
+                sans-serif;
+        }
 
-body {
-    background: transparent;
+        html {
+            color-scheme: dark;
+            background-color: #4f46e5;
+        }
 
-    min-height: 100vh;
-    padding:
-        max(20px, env(safe-area-inset-top))
-        16px
-        max(20px, env(safe-area-inset-bottom));
+        html::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: var(--app-bg);
+        }
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            min-height: 100dvh;
+        }
 
-    overflow: hidden;
-}
-:root {
-    --glass-bg: rgba(255,255,255,0.12);
-    --glass-border: rgba(255,255,255,0.22);
-    --text: rgba(255,255,255,0.95);
-}
+        body {
+            background-color: #4f46e5;
+            background: var(--app-bg);
+            background-attachment: fixed;
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        sans-serif;
-}
+            padding:
+                max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
 
-body {
-    min-height: 100vh;
-    padding:
-        max(20px, env(safe-area-inset-top))
-        16px
-        max(20px, env(safe-area-inset-bottom));
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+            overflow: hidden;
+        }
 
-   
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
 
-    overflow: hidden;
-}
+        body::before {
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, .18);
+            top: -80px;
+            left: -80px;
+        }
 
-body::before,
-body::after {
-    content: "";
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-}
+        body::after {
+            width: 220px;
+            height: 220px;
+            background: rgba(0, 255, 255, .15);
+            bottom: -60px;
+            right: -60px;
+        }
 
-body::before {
-    width: 250px;
-    height: 250px;
-    background: rgba(255,255,255,.18);
-    top: -80px;
-    left: -80px;
-}
+        .card {
+            position: relative;
+            width: min(100%, 420px);
+            padding: 28px;
 
-body::after {
-    width: 220px;
-    height: 220px;
-    background: rgba(0,255,255,.15);
-    bottom: -60px;
-    right: -60px;
-}
+            background: var(--glass-bg);
 
-.card {
-    position: relative;
-    width: min(100%, 420px);
-    padding: 28px;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
 
-    background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
 
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, .15),
+                inset 0 1px 1px rgba(255, 255, 255, .35);
 
-    border: 1px solid var(--glass-border);
-    border-radius: 32px;
+            color: var(--text);
+            overflow: hidden;
+        }
 
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.15),
-        inset 0 1px 1px rgba(255,255,255,.35);
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -40%;
+            left: -20%;
 
-    color: var(--text);
-    overflow: hidden;
-}
+            width: 140%;
+            height: 80%;
 
-.card::before {
-    content: "";
-    position: absolute;
-    top: -40%;
-    left: -20%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(255, 255, 255, .25),
+                    transparent);
 
-    width: 140%;
-    height: 80%;
+            transform: rotate(-10deg);
+        }
 
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.25),
-        transparent
-    );
+        .icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
 
-    transform: rotate(-10deg);
-}
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
 
-.icon {
-    font-size: 56px;
-    margin-bottom: 12px;
-    text-align: center;
-}
+        .input-group {
+            margin-bottom: 16px;
+        }
 
-h2 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 24px;
-}
+        .label {
+            font-size: 14px;
+            opacity: .85;
+            margin-bottom: 8px;
+        }
 
-.input-group {
-    margin-bottom: 16px;
-}
+        input[type="time"] {
+            width: 100%;
+            height: 58px;
 
-.label {
-    font-size: 14px;
-    opacity: .85;
-    margin-bottom: 8px;
-}
+            padding: 0 16px;
 
-input[type="time"] {
-    width: 100%;
-    height: 58px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .2);
 
-    padding: 0 16px;
+            background: rgba(255, 255, 255, .12);
+            color: white;
 
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,.2);
+            font-size: 18px;
+            outline: none;
 
-    background: rgba(255,255,255,.12);
-    color: white;
+            backdrop-filter: blur(20px);
 
-    font-size: 18px;
-    outline: none;
+            transition: .25s;
+        }
 
-    backdrop-filter: blur(20px);
+        input[type="time"]:focus {
+            border-color: rgba(255, 255, 255, .45);
+            background: rgba(255, 255, 255, .18);
+        }
 
-    transition: .25s;
-}
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
 
-input[type="time"]:focus {
-    border-color: rgba(255,255,255,.45);
-    background: rgba(255,255,255,.18);
-}
+        #result {
+            display: none;
 
-input[type="time"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
+            margin-top: 20px;
+            padding: 24px;
 
-#result {
-    display: none;
+            border-radius: 24px;
 
-    margin-top: 20px;
-    padding: 24px;
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .18);
 
-    border-radius: 24px;
+            backdrop-filter: blur(20px);
 
-    background: rgba(255,255,255,.14);
-    border: 1px solid rgba(255,255,255,.18);
+            animation: fade .3s ease;
+            text-align: center;
+        }
 
-    backdrop-filter: blur(20px);
+        .result-label {
+            font-size: 13px;
+            opacity: .8;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
 
-    animation: fade .3s ease;
-    text-align: center;
-}
+        .time {
+            font-size: clamp(32px, 8vw, 42px);
+            font-weight: 800;
+        }
 
-.result-label {
-    font-size: 13px;
-    opacity: .8;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-}
+        .note {
+            margin-top: 14px;
+            font-size: 13px;
+            opacity: .85;
+            line-height: 1.5;
+        }
 
-.time {
-    font-size: clamp(32px, 8vw, 42px);
-    font-weight: 800;
-}
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-.note {
-    margin-top: 14px;
-    font-size: 13px;
-    opacity: .85;
-    line-height: 1.5;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-@keyframes fade {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        .footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 12px;
+            opacity: .7;
+        }
 
-.footer {
-    margin-top: 16px;
-    text-align: center;
-    font-size: 12px;
-    opacity: .7;
-}
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 20px;
+                border-radius: 28px;
+            }
 
-@media (max-width: 480px) {
-    .card {
-        padding: 24px 20px;
-        border-radius: 28px;
-    }
+            h2 {
+                font-size: 24px;
+            }
 
-    h2 {
-        font-size: 24px;
-    }
+            .icon {
+                font-size: 48px;
+            }
 
-    .icon {
-        font-size: 48px;
-    }
+            input[type="time"] {
+                height: 54px;
+                font-size: 16px;
+            }
 
-    input[type="time"] {
-        height: 54px;
-        font-size: 16px;
-    }
-
-    .time {
-        font-size: 36px;
-    }
-}
-</style>
+            .time {
+                font-size: 36px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="card">
-    <div class="icon">🕒</div>
+    <div class="card">
+        <div class="icon">🕒</div>
 
-    <h2>Tính giờ tan làm</h2>
+        <h2>Tính giờ tan làm</h2>
 
-    <div class="input-group">
-        <div class="label">Giờ check-in</div>
-        <input type="time" id="checkin">
+        <div class="input-group">
+            <div class="label">Giờ check-in</div>
+            <input type="time" id="checkin">
+        </div>
+
+        <div id="result"></div>
+
+        <div class="footer">
+            8 giờ làm việc • Nghỉ trưa 1 giờ 15 phút
+        </div>
     </div>
 
-    <div id="result"></div>
+    <script>
+        const input = document.getElementById("checkin");
+        const result = document.getElementById("result");
 
-    <div class="footer">
-        8 giờ làm việc • Nghỉ trưa 1 giờ 15 phút
-    </div>
-</div>
+        // Lấy giờ đã lưu hoặc mặc định 08:30
+        const saved = localStorage.getItem("checkin");
+        input.value = saved || "08:30";
 
-<script>
-    const input = document.getElementById("checkin");
-const result = document.getElementById("result");
+        // Tính ngay khi mở app
+        calculate();
 
-// Lấy giờ đã lưu hoặc mặc định 08:30
-const saved = localStorage.getItem("checkin");
-input.value = saved || "08:30";
+        // Tự động tính khi thay đổi giờ
+        input.addEventListener("change", calculate);
 
-// Tính ngay khi mở app
-calculate();
+        function calculate() {
+            const value = input.value;
 
-// Tự động tính khi thay đổi giờ
-input.addEventListener("change", calculate);
+            if (!value) {
+                result.style.display = "none";
+                return;
+            }
 
-function calculate() {
-    const value = input.value;
+            // Lưu giờ check-in
+            localStorage.setItem("checkin", value);
 
-    if (!value) {
-        result.style.display = "none";
-        return;
-    }
+            const [h, m] = value.split(":").map(Number);
 
-    // Lưu giờ check-in
-    localStorage.setItem("checkin", value);
+            const leave = new Date();
+            leave.setHours(h, m, 0, 0);
 
-    const [h, m] = value.split(":").map(Number);
+            // 8 giờ làm việc
+            leave.setMinutes(leave.getMinutes() + 480);
 
-    const leave = new Date();
-    leave.setHours(h, m, 0, 0);
+            // Nghỉ trưa 1 giờ 15 phút
+            leave.setMinutes(leave.getMinutes() + 75);
 
-    // 8 giờ làm việc
-    leave.setMinutes(leave.getMinutes() + 480);
+            // Cộng thêm 1 phút để đảm bảo đủ công
+            leave.setMinutes(leave.getMinutes() + 1);
 
-    // Nghỉ trưa 1 giờ 15 phút
-    leave.setMinutes(leave.getMinutes() + 75);
+            const time = leave.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
 
-    // Cộng thêm 1 phút để đảm bảo đủ công
-    leave.setMinutes(leave.getMinutes() + 1);
-
-    const time = leave.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-
-    result.innerHTML = `
+            result.innerHTML = `
         <div class="result-label">
             GIỜ TAN LÀM
         </div>
@@ -376,9 +364,10 @@ function calculate() {
         </div>
     `;
 
-    result.style.display = "block";
-}
-</script>
+            result.style.display = "block";
+        }
+    </script>
 
 </body>
+
 </html>
