@@ -191,6 +191,35 @@
             filter: invert(1);
         }
 
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .2);
+            background: rgba(255, 255, 255, .1);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .chip:hover {
+            background: rgba(255, 255, 255, .18);
+            border-color: rgba(255, 255, 255, .35);
+        }
+
+        .chip.active {
+            background: rgba(255, 255, 255, .28);
+            border-color: rgba(255, 255, 255, .5);
+            font-weight: 600;
+        }
+
         #result {
             display: none;
 
@@ -282,6 +311,13 @@
         <div class="input-group">
             <div class="label">Giờ check-in</div>
             <input type="time" id="checkin">
+            <div class="suggestions" id="suggestions">
+                <button type="button" class="chip" data-time="08:30">8h30</button>
+                <button type="button" class="chip" data-time="08:45">8h45</button>
+                <button type="button" class="chip" data-time="09:00">9h00</button>
+                <button type="button" class="chip" data-time="09:15">9h15</button>
+                <button type="button" class="chip" data-time="09:29">9h29</button>
+            </div>
         </div>
 
         <div id="result"></div>
@@ -294,27 +330,39 @@
     <script>
         const input = document.getElementById("checkin");
         const result = document.getElementById("result");
+        const chips = document.querySelectorAll(".chip");
 
-        // Lấy giờ đã lưu hoặc mặc định 08:30
         const saved = localStorage.getItem("checkin");
         input.value = saved || "08:30";
 
-        // Tính ngay khi mở app
         calculate();
 
-        // Tự động tính khi thay đổi giờ
         input.addEventListener("change", calculate);
+
+        chips.forEach((chip) => {
+            chip.addEventListener("click", () => {
+                input.value = chip.dataset.time;
+                calculate();
+            });
+        });
+
+        function updateChips() {
+            chips.forEach((chip) => {
+                chip.classList.toggle("active", chip.dataset.time === input.value);
+            });
+        }
 
         function calculate() {
             const value = input.value;
 
             if (!value) {
                 result.style.display = "none";
+                updateChips();
                 return;
             }
 
-            // Lưu giờ check-in
             localStorage.setItem("checkin", value);
+            updateChips();
 
             const [h, m] = value.split(":").map(Number);
 
