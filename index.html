@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 
+    <meta name="mobile-web-app-capable" content="yes">
+
     <!-- Quan trọng cho iPhone tai thỏ -->
     <meta
         name="viewport"
@@ -37,16 +39,35 @@ body {
 }
 
 html {
-    background: linear-gradient(
-        135deg,
-        #4f46e5 0%,
-        #7c3aed 40%,
-        #0ea5e9 100%
-    );
+    background:
+        radial-gradient(circle at top left,
+            rgba(255,255,255,.25),
+            transparent 35%),
+        radial-gradient(circle at bottom right,
+            rgba(0,255,255,.18),
+            transparent 35%),
+        linear-gradient(
+            135deg,
+            #4f46e5 0%,
+            #7c3aed 40%,
+            #0ea5e9 100%
+        );
 }
 
 body {
     background: transparent;
+
+    min-height: 100vh;
+    padding:
+        max(20px, env(safe-area-inset-top))
+        16px
+        max(20px, env(safe-area-inset-bottom));
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
 }
 :root {
     --glass-bg: rgba(255,255,255,0.12);
@@ -77,19 +98,7 @@ body {
     justify-content: center;
     align-items: center;
 
-    background:
-        radial-gradient(circle at top left,
-            rgba(255,255,255,.25),
-            transparent 35%),
-        radial-gradient(circle at bottom right,
-            rgba(0,255,255,.18),
-            transparent 35%),
-        linear-gradient(
-            135deg,
-            #4f46e5 0%,
-            #7c3aed 40%,
-            #0ea5e9 100%
-        );
+   
 
     overflow: hidden;
 }
